@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:rick_morty/feature/data/models/location_model.dart';
 import 'package:rick_morty/feature/domain/entities/person_entity.dart';
 import 'package:meta/meta.dart';
 
@@ -39,10 +40,27 @@ class PersonModel extends PersonEntity {
         species: json['species'],
         type: json['type'],
         gender: json['gender'],
-        origin: json['origin'],
-        location: json['location'],
+        origin: json['origin'] != null ? LocationModel.fromJson(json['origin']) : null,
+        location: json['location'] != null ? LocationModel.fromJson(json['location']) : null,
         image: json['image'],
-        episode: json['episode'],
-        created: json['created']);
+        episode: (json['episode'] as List<dynamic>).map((e) => e as String).toList(),
+        created: DateTime.parse(json['created'] as String),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+      return {
+          'id': id,
+          'name': name,
+          'status': status,
+          'species': species,
+          'type': type,
+          'gender': gender,
+          'origin': origin,
+          'location': location,
+          'image': image,
+          'episode': episode,
+          'created': created.toIso8601String(),
+      };
   }
 }
